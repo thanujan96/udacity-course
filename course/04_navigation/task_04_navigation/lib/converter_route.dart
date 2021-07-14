@@ -16,10 +16,14 @@ import 'package:task_04_navigation/unit.dart';
 class ConverterRoute extends StatelessWidget {
   /// Units for this [Category].
   final List<Unit> units;
+  final ColorSwatch color;
+  final String name;
 
   /// This [ConverterRoute] requires the color and units to not be null.
   // TODO: Pass in the [Category]'s color
   const ConverterRoute({
+    @required this.name,
+    @required this.color,
     @required this.units,
   }) : assert(units != null);
 
@@ -30,6 +34,7 @@ class ConverterRoute extends StatelessWidget {
       // TODO: Set the color for this Container
       return Container(
         margin: EdgeInsets.all(8.0),
+        color: color,
         padding: EdgeInsets.all(16.0),
         child: Column(
           children: <Widget>[
@@ -46,8 +51,14 @@ class ConverterRoute extends StatelessWidget {
       );
     }).toList();
 
-    return ListView(
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: color,
+        title: Center(child: Text(name),),
+      ),
+      body:ListView(
       children: unitWidgets,
+    )
     );
   }
 }

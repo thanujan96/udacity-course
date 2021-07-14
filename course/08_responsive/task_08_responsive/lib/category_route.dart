@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'backdrop.dart';
 import 'category.dart';
@@ -103,16 +104,17 @@ class _CategoryRouteState extends State<CategoryRoute> {
   /// device is portrait or landscape.
   ///
   /// For portrait, we use a [ListView]. For landscape, we use a [GridView].
-  Widget _buildCategoryWidgets() {
-    return ListView.builder(
-      itemBuilder: (BuildContext context, int index) {
-        return CategoryTile(
-          category: _categories[index],
-          onTap: _onCategoryTap,
-        );
-      },
-      itemCount: _categories.length,
-    );
+  Widget _buildCategoryWidgets(Orientation orientation) {
+    return GridView.count(
+      crossAxisCount: orientation == Orientation.portrait?1:2,
+      childAspectRatio: 3.0,
+      children: _categories.map((category) => (
+        CategoryTile(
+          category: category, 
+          onTap: _onCategoryTap
+          )
+      )).toList());
+
   }
 
   /// Returns a list of mock [Unit]s.
@@ -128,13 +130,14 @@ class _CategoryRouteState extends State<CategoryRoute> {
 
   @override
   Widget build(BuildContext context) {
+    assert(debugCheckHasMediaQuery(context));
     final listView = Padding(
       padding: EdgeInsets.only(
         left: 8.0,
         right: 8.0,
         bottom: 48.0,
       ),
-      child: _buildCategoryWidgets(),
+      child: _buildCategoryWidgets(MediaQuery.of(context).orientation),
     );
 
     return Backdrop(

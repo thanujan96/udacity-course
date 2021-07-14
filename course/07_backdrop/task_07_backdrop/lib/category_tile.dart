@@ -4,6 +4,8 @@
 
 // To keep your imports tidy, follow the ordering guidelines at
 // https://www.dartlang.org/guides/language/effective-dart/style#ordering
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
@@ -75,7 +77,7 @@ class CategoryTile extends StatelessWidget {
           // We can use either the () => function() or the () { function(); }
           // syntax.
           // TODO: This should call the onTap() passed into the constructor
-          onTap: () => _navigateToConverter(context),
+          onTap: () =>this.onTap(category),
           child: Padding(
             padding: EdgeInsets.all(8.0),
             child: Row(

@@ -3,6 +3,8 @@
 // found in the LICENSE file.
 
 import 'package:flutter/material.dart';
+import 'package:task_07_backdrop/backdrop.dart';
+import 'package:task_07_backdrop/unit_converter.dart';
 
 import 'category.dart';
 import 'category_tile.dart';
@@ -27,6 +29,9 @@ class CategoryRoute extends StatefulWidget {
 class _CategoryRouteState extends State<CategoryRoute> {
   // TODO: Keep track of a default [Category], and the currently-selected
   // [Category]
+  Category _selectedCategory;
+  Category _defaultCategory;
+
   final _categories = <Category>[];
   static const _categoryNames = <String>[
     'Length',
@@ -78,19 +83,34 @@ class _CategoryRouteState extends State<CategoryRoute> {
   void initState() {
     super.initState();
     // TODO: Set the default [Category] for the unit converter that opens
+    
     for (var i = 0; i < _categoryNames.length; i++) {
+      
       _categories.add(Category(
         name: _categoryNames[i],
         color: _baseColors[i],
         iconLocation: Icons.cake,
         units: _retrieveUnitList(_categoryNames[i]),
       ));
+      if(i==0){
+        _default(_categories[0]);
+      }
     }
+  }
+
+  void _default(Category category){
+    setState(() {
+      _selectedCategory = category;
+    });
   }
 
   // TODO: Fill out this function
   /// Function to call when a [Category] is tapped.
-  void _onCategoryTap(Category category) {}
+  void _onCategoryTap(Category category) {
+    setState(() {
+      _selectedCategory = category;
+    });
+  }
 
   /// Makes the correct number of rows for the list view.
   ///
@@ -127,22 +147,31 @@ class _CategoryRouteState extends State<CategoryRoute> {
       child: _buildCategoryWidgets(),
     );
 
-    final appBar = AppBar(
-      elevation: 0.0,
-      title: Text(
-        'Unit Converter',
-        style: TextStyle(
-          color: Colors.black,
-          fontSize: 30.0,
-        ),
-      ),
-      centerTitle: true,
-      backgroundColor: _backgroundColor,
-    );
+    // final appBar = AppBar(
+    //   elevation: 0.0,
+    //   title: Text(
+    //     'Unit Converter',
+    //     style: TextStyle(
+    //       color: Colors.black,
+    //       fontSize: 30.0,
+    //     ),
+    //   ),
+    //   centerTitle: true,
+    //   backgroundColor: _backgroundColor,
+    // );
 
-    return Scaffold(
-      appBar: appBar,
-      body: listView,
-    );
+    // return Scaffold(
+    //   appBar: appBar,
+    //   body: listView,
+    // );
+    return Backdrop(
+      currentCategory: _selectedCategory==null? _defaultCategory:_selectedCategory, 
+      frontPanel: _selectedCategory == null
+                  ?UnitConverter(category: _defaultCategory)
+                  :UnitConverter(category: _selectedCategory), 
+      backPanel: listView,
+      frontTitle: Text('Unit Converter'),
+      backTitle: Text('select a Category')
+      );
   }
 }

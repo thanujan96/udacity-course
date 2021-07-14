@@ -37,7 +37,7 @@ class _UnitConverterState extends State<UnitConverter> {
   bool _showValidationError = false;
   final _inputKey = GlobalKey(debugLabel: 'inputText');
   // TODO: Add a flag for whether to show error UI
-
+  bool _errorFlag=false;
   @override
   void initState() {
     super.initState();
@@ -106,14 +106,25 @@ class _UnitConverterState extends State<UnitConverter> {
     // Our API has a handy convert function, so we can use that for
     // the Currency [Category]
     if (widget.category.name == apiCategory['name']) {
-      final api = Api();
-      final conversion = await api.convert(apiCategory['route'],
+      
+        final api = Api();
+        final conversion = await api.convert(apiCategory['route'],
           _inputValue.toString(), _fromValue.name, _toValue.name);
-      // TODO: Check whether to show an error UI
-      setState(() {
+        if(conversion==null){
+          setState(() {
+        _errorFlag = true;
+      });
+        }
+        setState(() {
         _convertedValue = _format(conversion);
       });
-    } else {
+    }
+      
+      
+      
+      // TODO: Check whether to show an error UI
+      
+    else {
       // For the static units, we do the conversion ourselves
       setState(() {
         _convertedValue = _format(
@@ -204,7 +215,37 @@ class _UnitConverterState extends State<UnitConverter> {
   @override
   Widget build(BuildContext context) {
     // TODO: Build an error UI
-
+  if (widget.category.units == null ||
+        (widget.category.name == 'Currency' && _errorFlag)) {
+      return SingleChildScrollView(
+        child: Container(
+          margin: _padding,
+          padding: _padding,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16.0),
+            color: widget.category.color['error'],
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.error_outline,
+                size: 180.0,
+                color: Colors.white,
+              ),
+              Text(
+                "Oh no! We can't connect right now!",
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.headline.copyWith(
+                      color: Colors.white,
+                    ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
     final input = Padding(
       padding: _padding,
       child: Column(

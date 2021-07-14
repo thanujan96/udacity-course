@@ -4,6 +4,8 @@
 
 // To keep your imports tidy, follow the ordering guidelines at
 // https://www.dartlang.org/guides/language/effective-dart/style#ordering
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 // @required is defined in the meta.dart package
 import 'package:meta/meta.dart';
@@ -48,6 +50,10 @@ class Category extends StatelessWidget {
   /// Navigates to the [ConverterRoute].
   void _navigateToConverter(BuildContext context) {
     // TODO: Using the Navigator, navigate to the [ConverterRoute]
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context)=>ConverterRoute(name:name,color:color,units: units))
+      );
   }
 
   /// Builds a custom widget that shows [Category] information.
@@ -60,7 +66,15 @@ class Category extends StatelessWidget {
   // See https://docs.flutter.io/flutter/material/Theme-class.html
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.transparent,
+//       Color(0xFF013487)
+
+// Color(0xFF4CD132)
+
+// Color(0xFF0134GG)
+
+// Color(0xFFFFFF)
+
+      color: Color(0xFFFFFF),
       child: Container(
         height: _rowHeight,
         child: InkWell(
@@ -72,6 +86,7 @@ class Category extends StatelessWidget {
           // TODO: Update this onTap property to call _navigateToConverter()
           onTap: () {
             print('I was tapped!');
+            _navigateToConverter(context);
           },
           child: Padding(
             padding: EdgeInsets.all(8.0),
